@@ -37,6 +37,15 @@ func (m *Mongo) FindOne(dbName, collName string, query map[string]interface{}, r
 	return m.Session.DB(dbName).C(collName).Find(bson.M(query)).One(result)
 }
 
+//count of document
+func (m *Mongo) Count(dbName, collName string, query map[string]interface{}) int {
+	count, err := m.Session.DB(dbName).C(collName).Find(bson.M(query)).Count()
+	if err != nil {
+		return 0
+	}
+	return count
+}
+
 //close mongo
 func (m *Mongo) Close() {
 	m.Session.Close()
