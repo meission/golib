@@ -46,6 +46,11 @@ func (m *Mongo) Count(dbName, collName string, query map[string]interface{}) int
 	return count
 }
 
+//remove documents
+func (m *Mongo) Remove(dbName, collName string, query map[string]interface{}) error {
+	return m.Session.DB(dbName).C(collName).Remove(bson.M(query))
+}
+
 //close mongo
 func (m *Mongo) Close() {
 	m.Session.Close()
