@@ -24,12 +24,13 @@ func NewMongo(url string) (*Mongo, error) {
 	if err != nil {
 		return &Mongo{}, err
 	}
+	session.SetMode(mgo.Monotonic, true)
 	return &Mongo{url, session}, nil
 }
 
 //insert some document
 func (m *Mongo) Insert(dbName, collName string, docs ...interface{}) error {
-	return m.Session.DB(dbName).C(collName).Insert(docs)
+	return m.Session.DB(dbName).C(collName).Insert(docs...)
 }
 
 //find one document
