@@ -38,6 +38,11 @@ func (m *Mongo) FindOne(dbName, collName string, query map[string]interface{}, r
 	return m.Session.DB(dbName).C(collName).Find(bson.M(query)).One(result)
 }
 
+//find all document
+func (m *Mongo) FindAll(dbName, collName string, query map[string]interface{}, result interface{}) error {
+	return m.Session.DB(dbName).C(collName).Find(bson.M(query)).All(result)
+}
+
 //count of document
 func (m *Mongo) Count(dbName, collName string, query map[string]interface{}) int {
 	count, err := m.Session.DB(dbName).C(collName).Find(bson.M(query)).Count()
