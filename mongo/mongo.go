@@ -52,6 +52,18 @@ func (m *Mongo) Count(dbName, collName string, query map[string]interface{}) int
 	return count
 }
 
+//check is exist
+func (m *Mongo) IsExist(dbName, collName string, query map[string]interface{}) bool {
+	count, err := m.Session.DB(dbName).C(collName).Find(bson.M(query)).Count()
+	if err != nil {
+		return false
+	}
+	if count > 0 {
+		return true
+	}
+	return false
+}
+
 //remove documents
 func (m *Mongo) Remove(dbName, collName string, query map[string]interface{}) error {
 	return m.Session.DB(dbName).C(collName).Remove(bson.M(query))
