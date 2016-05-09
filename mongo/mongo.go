@@ -33,6 +33,11 @@ func (m *Mongo) Insert(dbName, collName string, docs ...interface{}) error {
 	return m.Session.DB(dbName).C(collName).Insert(docs...)
 }
 
+//update one document
+func (m *Mongo) Update(dbName, collName string, selector map[string]interface{}, update interface{}) error {
+	return m.Session.DB(dbName).C(collName).Update(selector, update)
+}
+
 //find one document
 func (m *Mongo) FindOne(dbName, collName string, query map[string]interface{}, result interface{}) error {
 	return m.Session.DB(dbName).C(collName).Find(bson.M(query)).One(result)
