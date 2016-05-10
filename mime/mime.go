@@ -10,6 +10,7 @@ package mime
 import (
 	//golang offical package
 	"bytes"
+	"encoding/hex"
 )
 
 type Mime struct {
@@ -30,7 +31,11 @@ func Suffix(suffix string) Mime {
 //give the first two Byte to get mime
 func FileHeader(file []byte) Mime {
 	for k, v := range Headers {
-		if bytes.HasPrefix(file, k) {
+		header, err := hex.DecodeString(k)
+		if err != nil {
+			continue
+		}
+		if bytes.HasPrefix(file, header) {
 			return v
 		}
 	}
@@ -38,27 +43,27 @@ func FileHeader(file []byte) Mime {
 }
 
 //file headers map to mime
-var Headers = map[[]byte]Mime{
-	[]byte{255, 216}: IMAGEJPG,
-	[]byte{71, 73}:   IMAGEGIF,
-	[]byte{66, 77}:   IMAGEBMP,
-	[]byte{137, 80}:  IMAGEPNG,
-	[]byte{208, 207}: APPDOC,
-	[]byte{80, 75}:   APPDOCX,
-	[]byte{208, 207}: APPXLS,
-	[]byte{80, 75}:   APPXLSX,
-	[]byte{239, 187}: APPJS,
-	[]byte{67, 87}:   APPSWF,
-	[]byte{70, 67}:   TEXTTXT,
-	[]byte{73, 68}:   AUDIOMP3,
-	[]byte{48, 38}:   AUDIOWMA,
-	[]byte{77, 84}:   AUDIOMID,
-	[]byte{82, 97}:   APPRAR,
-	[]byte{80, 75}:   APPZIP,
-	[]byte{60, 63}:   APPXML,
+var Headers = map[string]Mime{
+	hex.EncodeToString([]byte{255, 216}): IMAGEJPG,
+	hex.EncodeToString([]byte{71, 73}):   IMAGEGIF,
+	hex.EncodeToString([]byte{66, 77}):   IMAGEBMP,
+	hex.EncodeToString([]byte{137, 80}):  IMAGEPNG,
+	hex.EncodeToString([]byte{208, 207}): APPDOC,
+	hex.EncodeToString([]byte{80, 75}):   APPDOCX,
+	hex.EncodeToString([]byte{208, 207}): APPXLS,
+	hex.EncodeToString([]byte{80, 75}):   APPXLSX,
+	hex.EncodeToString([]byte{239, 187}): APPJS,
+	hex.EncodeToString([]byte{67, 87}):   APPSWF,
+	hex.EncodeToString([]byte{70, 67}):   TEXTTXT,
+	hex.EncodeToString([]byte{73, 68}):   AUDIOMP3,
+	hex.EncodeToString([]byte{48, 38}):   AUDIOWMA,
+	hex.EncodeToString([]byte{77, 84}):   AUDIOMID,
+	hex.EncodeToString([]byte{82, 97}):   APPRAR,
+	hex.EncodeToString([]byte{80, 75}):   APPZIP,
+	hex.EncodeToString([]byte{60, 63}):   APPXML,
 }
 
-const Mimes = []Mime{
+var Mimes = []Mime{
 	Mime{".323", "text/h323"},
 	Mime{".3gp", "video/3gpp"},
 	Mime{".aab", "application/x-authoware-bin"},
@@ -544,7 +549,7 @@ const Mimes = []Mime{
 	Mime{".json", "application/json"},
 }
 
-const (
+var (
 	UKNOWN       = Mime{"", ""}
 	TEXT232      = Mime{".323", "text/h323"}
 	VIDEO3GP     = Mime{".3gp", "video/3gpp"}
